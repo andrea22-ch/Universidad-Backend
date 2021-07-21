@@ -1,0 +1,28 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Http;
+using System.Web.Http.Cors;
+using Universidad.Api.Controllers;
+
+namespace Universidad.Api
+{
+    public static class WebApiConfig
+    {
+        public static void Register(HttpConfiguration config)
+        {
+            // Configuración y servicios de API web
+            config.EnableCors();
+            var enableCorsAtribute = new EnableCorsAttribute("*", "Origin,Content-type,Accept","GET,PUT,POST,DELETE,OPTIONS");
+            config.EnableCors(enableCorsAtribute);
+            // Rutas de API web
+            config.MapHttpAttributeRoutes();
+            config.MessageHandlers.Add(new TokenValidationHandler());
+            config.Routes.MapHttpRoute(
+                name: "DefaultApi",
+                routeTemplate: "api/{controller}/{id}",
+                defaults: new { id = RouteParameter.Optional }
+            );
+        }
+    }
+}
